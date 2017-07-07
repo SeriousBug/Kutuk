@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Kütük</string>
+    <string name="name_view" translatable="false">%1$s %2$s</string>
+    <string name="details_view" translatable="false">%1$s %2$s</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="random">Random</string>
+    <string name="human">Human</string>
+    <string name="elf">Elf</string>
+    <string name="dwarf">Dwarf</string>
+    <string name="halfling">Halfling</string>
+</resources>

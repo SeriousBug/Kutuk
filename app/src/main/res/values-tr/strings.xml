@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kütük</string>
+    <string name="dwarf">Cüce</string>
+    <string name="elf">Elf</string>
+    <string name="female">Kadın</string>
+    <string name="halfling">Buçukluk</string>
+    <string name="human">İnsan</string>
+    <string name="male">Erkek</string>
+    <string name="random">Rastgele</string>
+</resources>
