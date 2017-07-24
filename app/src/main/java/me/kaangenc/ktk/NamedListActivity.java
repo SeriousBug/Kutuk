@@ -44,7 +44,10 @@ abstract class NamedListActivity extends AppCompatActivity {
 
     abstract protected RecyclerView.Adapter getViewAdapter();
     abstract protected NamedRealmFactory getRealmFactory();
-    abstract protected int getTitleResource();
+    /**
+     * @return The string that will be displayed as the title of the list.
+     */
+    abstract protected String getListTitle();
 
     @Override
     protected void onDestroy() {
@@ -55,7 +58,7 @@ abstract class NamedListActivity extends AppCompatActivity {
 
     public void addNamed(View view) {
         CreateNamedDialog dialog = new CreateNamedDialog(
-                getTitleResource(),
+                getListTitle(),
                 this,
                 getRealmFactory()
         );

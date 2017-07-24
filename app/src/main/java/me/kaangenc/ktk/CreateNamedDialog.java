@@ -37,7 +37,7 @@ class CreateNamedDialog {
     private Realm realm;
     private NamedRealmFactory factory;
 
-    CreateNamedDialog(int titleResource, Context context, NamedRealmFactory factory) {
+    CreateNamedDialog(String title, Context context, NamedRealmFactory factory) {
         this.context = context;
         this.factory = factory;
         realm = Realm.getDefaultInstance();
@@ -47,7 +47,7 @@ class CreateNamedDialog {
         View dialogView = inflater.inflate(R.layout.create_named, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(String.format(context.getString(R.string.create_title), context.getString(titleResource)))
+        builder.setTitle(String.format(context.getString(R.string.create_title), title))
                 .setView(dialogView)
                 // Disable button listeners to avoid the automatic dismiss behaviour
                 .setPositiveButton(R.string.create_accept, null)

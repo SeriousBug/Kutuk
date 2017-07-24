@@ -20,14 +20,18 @@
 package me.kaangenc.ktk.data;
 
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.LinkingObjects;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class GameObject extends RealmObject implements Named {
+    @Required @PrimaryKey private String id;
     @Required private String name;
     private Category category;
 
@@ -63,9 +67,22 @@ public class GameObject extends RealmObject implements Named {
         this.links = links;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+
     static public class RealmFactory implements NamedRealmFactory {
+        Category category;
+
+        public RealmFactory(Category category) {
+            this.category = category;
+        }
+
         @Override public Named create(Realm realm) {
-            return realm.createObject(GameObject.class);
+            GameObject object = realm.createObject(GameObject.class, UUID.randomUUID().toString());
+            object.setCategory(category);
+            return object;
         }
     }
 }

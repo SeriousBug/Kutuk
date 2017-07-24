@@ -20,6 +20,7 @@
 package me.kaangenc.ktk.data;
 
 public interface Named {
+    String getId();
     String getName();
     void setName(String name);
 }

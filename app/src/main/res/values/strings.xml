@@ -22,6 +22,7 @@
     <string name="create_hint">Name</string>
     <string name="create_title">Create %s</string>
     <string name="category">Category</string>
+    <string name="game_object">Object</string>
     <string name="create_accept">Create</string>
     <string name="create_cancel">Cancel</string>
     <string name="create_error_empty">Please enter a name</string>

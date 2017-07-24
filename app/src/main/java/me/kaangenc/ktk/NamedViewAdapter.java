@@ -19,6 +19,8 @@
 
 package me.kaangenc.ktk;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,9 +34,19 @@ import io.realm.RealmRecyclerViewAdapter;
 import me.kaangenc.ktk.data.Named;
 
 class NamedViewAdapter<D extends RealmObject & Named> extends RealmRecyclerViewAdapter<D, NamedViewAdapter.ViewHolder> {
-    NamedViewAdapter(@Nullable OrderedRealmCollection<D> data) {
+    public static final String INTENT_ID_KEY = "NamedViewAdapterId";
+    private ComponentName targetActivity;
+
+    /**
+     * @param data The query whose results will be displayed in this view.
+     * @param targetActivity The activity that should be switched to when one of the results is clicked.
+     *                       The activity will be passed the id of the element as an extra on the intent,
+     *                       using {@link #INTENT_ID_KEY INTENT_ID_KEY} as a key.
+     */
+    NamedViewAdapter(@Nullable OrderedRealmCollection<D> data, ComponentName targetActivity) {
         super(data, true);
         setHasStableIds(true);
+        this.targetActivity = targetActivity;
     }
 
     @Override
@@ -45,9 +57,18 @@ class NamedViewAdapter<D extends RealmObject & Named> extends RealmRecyclerViewA
     }
 
     @Override
-    public void onBindViewHolder(NamedViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final NamedViewAdapter.ViewHolder holder, int position) {
         final Named named = getItem(position);
-        holder.name.setText(named != null ? named.getName() : "");
+        assert named != null;
+        holder.name.setText(named.getName());
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                Intent intent = new Intent()
+                        .setComponent(targetActivity)
+                        .putExtra(INTENT_ID_KEY, named.getId());
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

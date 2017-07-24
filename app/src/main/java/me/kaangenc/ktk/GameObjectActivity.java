@@ -19,29 +19,37 @@
 
 package me.kaangenc.ktk;
 
-import android.content.ComponentName;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import me.kaangenc.ktk.data.Category;
+import me.kaangenc.ktk.data.GameObject;
 import me.kaangenc.ktk.data.NamedRealmFactory;
 
+public class GameObjectActivity extends NamedListActivity {
+    private Category category;
 
-public class CategoryActivity extends NamedListActivity {
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTitle(String.format("%s - %s", getTitle(), category.getName()));
+    }
+
     @Override protected RecyclerView.Adapter getViewAdapter() {
+        // These must be done here and not in onCreate, because this method is called by
+        // parent class on it's onCreate
+        String id = getIntent().getStringExtra(NamedViewAdapter.INTENT_ID_KEY);
+        category = realm.where(Category.class).equalTo("id", id).findFirst();
         return new NamedViewAdapter<>(
-                realm.where(Category.class).findAll(),
-                new ComponentName(
-                        GameObjectActivity.class.getPackage().getName(),
-                        GameObjectActivity.class.getName()
-                )
+                category.getContainedObjects(),
+                null
         );
     }
 
     @Override protected NamedRealmFactory getRealmFactory() {
-        return new Category.RealmFactory();
+        return new GameObject.RealmFactory(category);
     }
 
     @Override protected String getListTitle() {
-        return getString(R.string.category);
+        return getString(R.string.game_object);
     }
 }
