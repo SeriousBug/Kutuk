@@ -20,10 +20,13 @@
 package me.kaangenc.ktk;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import io.realm.Realm;
 import me.kaangenc.ktk.data.NamedRealmFactory;
@@ -40,6 +43,13 @@ abstract class NamedListActivity extends AppCompatActivity {
         RecyclerView namedView = (RecyclerView) findViewById(R.id.named_list_view);
         namedView.setLayoutManager(new LinearLayoutManager(this));
         namedView.setAdapter(getViewAdapter());
+
+        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.add_button);
+        addButton.setImageDrawable(MaterialDrawableBuilder.with(this)
+                .setIcon(MaterialDrawableBuilder.IconValue.PLUS)
+                .setColorResource(R.color.text_light)
+                .build()
+        );
     }
 
     abstract protected RecyclerView.Adapter getViewAdapter();
