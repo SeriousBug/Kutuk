@@ -26,25 +26,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import io.realm.Realm;
-import me.kaangenc.ktk.data.Category;
+import me.kaangenc.ktk.data.NamedRealmFactory;
 
 
-public class MainActivity extends AppCompatActivity {
-    private Realm realm;
-    private RecyclerView categoryView;
-    private NamedViewAdapter<Category> adapter;
+abstract class NamedListActivity extends AppCompatActivity {
+    protected Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.named_list);
         realm = Realm.getDefaultInstance();
-        categoryView = (RecyclerView) findViewById(R.id.categories);
-
-        adapter = new NamedViewAdapter<>(realm.where(Category.class).findAll());
-        categoryView.setLayoutManager(new LinearLayoutManager(this));
-        categoryView.setAdapter(adapter);
+        RecyclerView namedView = (RecyclerView) findViewById(R.id.named_list_view);
+        namedView.setLayoutManager(new LinearLayoutManager(this));
+        namedView.setAdapter(getViewAdapter());
     }
+
+    abstract protected RecyclerView.Adapter getViewAdapter();
+    abstract protected NamedRealmFactory getRealmFactory();
+    abstract protected int getTitleResource();
 
     @Override
     protected void onDestroy() {
@@ -53,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
         realm = null;
     }
 
-    public void addCategory(View view) {
-        CreateNamedDialog createCategory = new CreateNamedDialog(R.string.category, this, new Category.RealmFactory());
-        createCategory.show();
+    public void addNamed(View view) {
+        CreateNamedDialog dialog = new CreateNamedDialog(
+                getTitleResource(),
+                this,
+                getRealmFactory()
+        );
+        dialog.show();
     }
 }
