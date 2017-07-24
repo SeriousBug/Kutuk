@@ -19,101 +19,42 @@
 
 package me.kaangenc.ktk;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
-import static java.lang.Math.random;
-
+import io.realm.Realm;
+import me.kaangenc.ktk.data.Category;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<String> maleNames = new ArrayList<>();
-    private ArrayList<String> femaleNames = new ArrayList<>();
-    private ArrayList<String> surnames = new ArrayList<>();
-
-    private void readNames(ArrayList<String> names, int resource) {
-        BufferedReader reader =
-                new BufferedReader(
-                        new InputStreamReader(
-                                getResources().openRawResource(resource)
-                        )
-                );
-        try {
-            while (reader.ready()) {
-                names.add(reader.readLine());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    String randomSelect(ArrayList<String> names) {
-        return names.get((int)(random() * names.size()));
-    }
-
-    void showName(String firstName, String surname) {
-        String fullName = getResources().getString(R.string.name_view,
-                firstName, surname
-        );
-        ((TextView)findViewById(R.id.name)).setText(fullName);
-    }
-
-    String randomRace() {
-        double r = random();
-        int selection;
-        if (r <= 0.5) {
-            selection = R.string.human;
-        } else if (r <= 0.7) {
-            selection = R.string.elf;
-        } else if (r <= 0.85) {
-            selection = R.string.dwarf;
-        } else {
-            selection = R.string.halfling;
-        }
-        return getResources().getString(selection);
-    }
-
-    void showDetails(String gender, String race) {
-        String fullName = getResources().getString(R.string.details_view,
-                gender, race
-        );
-        ((TextView)findViewById(R.id.details)).setText(fullName);
-    }
-
-    public void randomMale(View view) {
-        showName(randomSelect(maleNames), randomSelect(surnames));
-        showDetails("Male", randomRace());
-    }
-
-    public void randomFemale(View view) {
-        showName(randomSelect(femaleNames), randomSelect(surnames));
-        showDetails("Female", randomRace());
-    }
-
-    public void randomName(View view) {
-        if (random() <= 0.5) {
-            randomMale(view);
-        } else {
-            randomFemale(view);
-        }
-    }
+    private Realm realm;
+    private RecyclerView categoryView;
+    private NamedViewAdapter<Category> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        realm = Realm.getDefaultInstance();
+        categoryView = (RecyclerView) findViewById(R.id.categories);
 
-        readNames(maleNames, R.raw.male);
-        readNames(femaleNames, R.raw.female);
-        readNames(surnames, R.raw.surname);
+        adapter = new NamedViewAdapter<>(realm.where(Category.class).findAll());
+        categoryView.setLayoutManager(new LinearLayoutManager(this));
+        categoryView.setAdapter(adapter);
+    }
 
-        randomName(null);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+        realm = null;
+    }
+
+    public void addCategory(View view) {
+        CreateNamedDialog createCategory = new CreateNamedDialog(R.string.category, this, new Category.RealmFactory());
+        createCategory.show();
     }
 }

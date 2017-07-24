@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2017 Kaan Genç
   ~
@@ -17,12 +18,15 @@
   ~ along with Kütük.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <string name="app_name">Kütük</string>
-    <string name="create_hint">Name</string>
-    <string name="create_title">Create %s</string>
-    <string name="category">Category</string>
-    <string name="create_accept">Create</string>
-    <string name="create_cancel">Cancel</string>
-    <string name="create_error_empty">Please enter a name</string>
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        />
+</LinearLayout>
