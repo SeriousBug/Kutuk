@@ -19,6 +19,7 @@
 
 package me.kaangenc.ktk;
 
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
@@ -31,17 +32,20 @@ public class GameObjectActivity extends NamedListActivity {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(String.format("%s - %s", getTitle(), category.getName()));
+        setTitle(category.getName());
     }
 
     @Override protected RecyclerView.Adapter getViewAdapter() {
-        // These must be done here and not in onCreate, because this method is called by
-        // parent class on it's onCreate
+        // These must be done here and not in onCreate, because this
+        // method is called during super.onCreate
         String id = getIntent().getStringExtra(NamedViewAdapter.INTENT_ID_KEY);
         category = realm.where(Category.class).equalTo("id", id).findFirst();
         return new NamedViewAdapter<>(
                 category.getContainedObjects(),
-                null
+                new ComponentName(
+                        ObjectDetailActivity.class.getPackage().getName(),
+                        ObjectDetailActivity.class.getName()
+                )
         );
     }
 

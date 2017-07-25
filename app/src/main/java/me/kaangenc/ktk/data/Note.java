@@ -37,4 +37,12 @@ public class Note extends RealmObject {
     public void setAssociatedObject(GameObject associatedObject) {
         this.associatedObject = associatedObject;
     }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
 }
