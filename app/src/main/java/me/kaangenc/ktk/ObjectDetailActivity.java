@@ -20,11 +20,13 @@
 package me.kaangenc.ktk;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
 import io.realm.Realm;
 import me.kaangenc.ktk.data.GameObject;
@@ -46,17 +48,17 @@ public class ObjectDetailActivity extends AppCompatActivity {
                 object.getName())
         );
 
-        FloatingActionButton addLink = (FloatingActionButton) findViewById(R.id.add_link);
-        addLink.setImageDrawable(MaterialDrawableBuilder.with(this)
-                .setIcon(MaterialDrawableBuilder.IconValue.LINK_VARIANT)
-                .setColorResource(R.color.text_light)
-                .build()
-        );
-        FloatingActionButton addNote = (FloatingActionButton) findViewById(R.id.add_note);
-        addNote.setImageDrawable(MaterialDrawableBuilder.with(this)
-                .setIcon(MaterialDrawableBuilder.IconValue.NOTE_PLUS)
-                .setColorResource(R.color.text_light)
-                .build()
+        setupFloatingButton(R.id.add_link, IconValue.LINK_VARIANT);
+        setupFloatingButton(R.id.add_note, IconValue.NOTE_PLUS);
+    }
+
+    private void setupFloatingButton(@IdRes int id, IconValue value) {
+        FloatingActionButton button = (FloatingActionButton) findViewById(id);
+        button.setImageDrawable(
+                MaterialDrawableBuilder.with(this)
+                        .setIcon(value)
+                        .setColorResource(R.color.text_light)
+                        .build()
         );
     }
 
