@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2017 Kaan Genç
   ~
@@ -17,15 +18,17 @@
   ~ along with Kütük.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <string name="app_name">Kütük</string>
-    <string name="create_hint">Name</string>
-    <string name="create_title">Create %s</string>
-    <string name="category">Category</string>
-    <string name="game_object">Object</string>
-    <string name="create_accept">Create</string>
-    <string name="create_cancel">Cancel</string>
-    <string name="create_error_empty">Please enter a name</string>
-    <string name="link_text">%1$s: %2$s is linked with %3$s.</string>
-    <string name="list_separator">,</string>
-</resources>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="8dp"
+        />
+</android.support.constraint.ConstraintLayout>

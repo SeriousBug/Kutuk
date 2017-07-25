@@ -72,6 +72,10 @@ public class GameObject extends RealmObject implements Named {
         return id;
     }
 
+    public RealmResults<Note> getNotes() {
+        return notes;
+    }
+
     static public class RealmFactory implements NamedRealmFactory {
         Category category;
 

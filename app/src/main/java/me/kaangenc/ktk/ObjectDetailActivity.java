@@ -23,12 +23,15 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
 import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
 import me.kaangenc.ktk.data.GameObject;
 
 public class ObjectDetailActivity extends AppCompatActivity {
@@ -50,6 +53,9 @@ public class ObjectDetailActivity extends AppCompatActivity {
 
         setupFloatingButton(R.id.add_link, IconValue.LINK_VARIANT);
         setupFloatingButton(R.id.add_note, IconValue.NOTE_PLUS);
+
+        setupRecyclerView(R.id.notes, new NoteAdapter(object.getNotes()));
+        setupRecyclerView(R.id.links, new LinkAdapter(object));
     }
 
     private void setupFloatingButton(@IdRes int id, IconValue value) {
@@ -60,6 +66,12 @@ public class ObjectDetailActivity extends AppCompatActivity {
                         .setColorResource(R.color.text_light)
                         .build()
         );
+    }
+
+    private void setupRecyclerView(@IdRes int id, RealmRecyclerViewAdapter adapter) {
+        RecyclerView view = (RecyclerView) findViewById(id);
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.setAdapter(adapter);
     }
 
     @Override protected void onDestroy() {
