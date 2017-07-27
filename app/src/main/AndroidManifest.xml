@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".GameObjectActivity"/>
         <activity android:name=".ObjectDetailActivity"/>
+        <activity android:name=".EditNoteActivity"/>
     </application>
 
 </manifest>

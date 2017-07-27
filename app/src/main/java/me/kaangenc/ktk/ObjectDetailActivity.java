@@ -19,6 +19,8 @@
 
 package me.kaangenc.ktk;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
@@ -30,9 +32,12 @@ import android.view.View;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder.IconValue;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import me.kaangenc.ktk.data.GameObject;
+import me.kaangenc.ktk.data.Note;
 
 public class ObjectDetailActivity extends AppCompatActivity {
     Realm realm;
@@ -51,14 +56,30 @@ public class ObjectDetailActivity extends AppCompatActivity {
                 object.getName())
         );
 
-        setupFloatingButton(R.id.add_link, IconValue.LINK_VARIANT);
-        setupFloatingButton(R.id.add_note, IconValue.NOTE_PLUS);
+        final Context context = this;
+        setupFloatingButton(R.id.add_link, IconValue.LINK_VARIANT, new View.OnClickListener() {
+            @Override public void onClick(View view) {
+            }
+        });
+        setupFloatingButton(R.id.add_note, IconValue.NOTE_PLUS, new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                final Intent intent = new Intent(context, EditNoteActivity.class);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        Note note = realm.createObject(Note.class, UUID.randomUUID().toString());
+                        note.setAssociatedObject(object);
+                        intent.putExtra("id", note.getId());
+                    }
+                });
+                startActivity(intent);
+            }
+        });
 
         setupRecyclerView(R.id.notes, new NoteAdapter(object.getNotes()));
         setupRecyclerView(R.id.links, new LinkAdapter(object));
     }
 
-    private void setupFloatingButton(@IdRes int id, IconValue value) {
+    private void setupFloatingButton(@IdRes int id, IconValue value, View.OnClickListener listener) {
         FloatingActionButton button = (FloatingActionButton) findViewById(id);
         button.setImageDrawable(
                 MaterialDrawableBuilder.with(this)
@@ -66,23 +87,19 @@ public class ObjectDetailActivity extends AppCompatActivity {
                         .setColorResource(R.color.text_light)
                         .build()
         );
+        button.setOnClickListener(listener);
     }
 
     private void setupRecyclerView(@IdRes int id, RealmRecyclerViewAdapter adapter) {
         RecyclerView view = (RecyclerView) findViewById(id);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(adapter);
+        view.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
         realm.close();
         realm = null;
-    }
-
-    public void addNote(View view) {
-    }
-
-    public void addLink(View view) {
     }
 }

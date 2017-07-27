@@ -21,10 +21,12 @@ package me.kaangenc.ktk.data;
 
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class Note extends RealmObject {
-    @Required private String contents = "";
+    @Required @PrimaryKey private String id;
+    @Required private String contents;
 
     private GameObject associatedObject;
 
@@ -44,5 +46,13 @@ public class Note extends RealmObject {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public boolean isEmpty() {
+        return getContents().trim().isEmpty();
     }
 }

@@ -19,6 +19,7 @@
 
 package me.kaangenc.ktk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -46,10 +47,18 @@ class NoteAdapter extends RealmRecyclerViewAdapter<Note, NoteAdapter.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Note note = getItem(position);
         assert note != null;
         holder.contents.setText(note.getContents());
+        holder.contents.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                final Context context = view.getContext();
+                Intent edit = new Intent(context, EditNoteActivity.class);
+                edit.putExtra("id", note.getId());
+                context.startActivity(edit);
+            }
+        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
